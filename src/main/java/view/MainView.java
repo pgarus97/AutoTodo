@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -17,8 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.formdev.flatlaf.FlatDarkLaf;
 
 import model.TodoExtractor;
 
@@ -31,16 +36,16 @@ public class MainView {
 	
 	//Declaration of components
 	private JFrame frame;
-	private JPanel mainPanel = new JPanel();
-	private JButton runButton = new JButton("Run");
-	private JButton inputButton = new JButton("Choose Input Path");
-	private JButton outputButton = new JButton("Choose Output Path");
-	private JLabel inputLabel = new JLabel();
-	private JLabel outputLabel = new JLabel();
+	private JPanel mainPanel;
+	private JButton runButton;
+	private JButton inputButton;
+	private JButton outputButton;
+	private JLabel inputLabel;
+	private JLabel outputLabel;
 	private File inputFile;
 	private File outputDir;
-	private JLabel searchWordInfo = new JLabel("Enter search words. Separate with ','"); 
-	private JTextField searchWordField = new JTextField("to do, to-do");
+	private JLabel searchWordInfo; 
+	private JTextField searchWordField;
 	
 	private static final String INPUT_PATH = "INPUT_PATH";  
 	private static final String OUTPUT_PATH = "OUTPUT_PATH";  
@@ -50,10 +55,23 @@ public class MainView {
 	public MainView() {	
 
 		/*
+		 * UI Design
+		 */
+		
+		FlatDarkLaf.setup();
+		
+		try {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+		
+		/*
 		 * GUI implementation
 		 */
 		
 		frame = new JFrame("AutoTodo by Bubzia");	
+		initUIComponents();
 	    initPaths();
 	    
 	    //panel
@@ -66,7 +84,7 @@ public class MainView {
 	    frame.add(mainPanel);
 	    frame.pack();
 	    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	    frame.setSize(400,400);
+	    frame.setSize(600,250);
 	    frame.setLayout(null); 
 	    frame.setVisible(true);
 	    
@@ -161,5 +179,24 @@ public class MainView {
 	    mainPanel.add(searchWordField);
 	    mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 	    mainPanel.add(runButton);
+    }
+    
+    private void initUIComponents() {
+    	mainPanel = new JPanel();
+    	runButton = new JButton("Run");
+    	inputButton = new JButton("Choose Input Path");
+    	outputButton = new JButton("Choose Output Path");
+    	inputLabel = new JLabel();
+    	outputLabel = new JLabel();
+    	searchWordInfo = new JLabel("Enter search words. Separate with ','"); 
+    	searchWordField = new JTextField("to do, to-do");
+    	// Set preferred size of text field
+    	searchWordField.setPreferredSize(new Dimension(150, searchWordField.getPreferredSize().height));
+    	searchWordField.setMaximumSize(searchWordField.getPreferredSize());
+
+
+    	// Set alignment X and Y of text field
+    	searchWordField.setAlignmentX(Component.LEFT_ALIGNMENT);
+    	searchWordField.setAlignmentY(Component.CENTER_ALIGNMENT);
     }
 }
